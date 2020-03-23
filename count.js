@@ -16,11 +16,14 @@ function getDateString(date) {
   return date.getFullYear() + '-' + (m < 10 ? '0' : '') + m + '-' + (d < 10 ? '0' : '') + d
 }
 
-let keywords = ['武漢']
+let searches = [
+  ['武漢'],
+  ['新冠']
+]
 
 let totalStat = {
   count: 0,
-  matches: 0
+  matches: searches.map(search => 0)
 }
 let dailyStat = {}
 for(let d = +from; d < +to; d += oneDay) {
@@ -28,26 +31,31 @@ for(let d = +from; d < +to; d += oneDay) {
   let dateStr = getDateString(dateObj)
   dailyStat[dateStr] = {}
 
-  let count = 0
-  let matches = 0
+  let dayCount = 0
+  let datMatches = searches.map(search => 0)
   const readInterface = readline.createInterface({
     input: fs.createReadStream(datasets + '/publications/' + dateStr + '.jsonl')
   })
   readInterface.on('line', line => {
-    count += 1
-    if(keywords.some(keyword => line.includes(keyword))) {
-      matches += 1
-    }
+    dayCount += 1
+    searches.forEach((keywords, index) => {
+      if(keywords.some(keyword => line.includes(keyword))) {
+        datMatches[index] += 1
+      }
+    })
   })
   readInterface.on('close', line => {
-    totalStat.count += count
-    totalStat.matches += matches
-    dailyStat[dateStr].count = count
-    dailyStat[dateStr].matches = matches
+    totalStat.count += dayCount
+    totalStat.matches = totalStat.matches.map((match, index) => match + datMatches[index])
+    dailyStat[dateStr].count = dayCount
+    dailyStat[dateStr].matches = datMatches
   })
 }
 
 process.on('exit', () => {
-  console.log(dailyStat)
-  console.log(totalStat)
+  for(dateStr in dailyStat) {
+    const dayStat = dailyStat[dateStr]
+    console.log(dateStr + '\t' + dayStat.count + '\t' + dayStat.matches.join('\t'))
+  }
+  console.log('total' + '\t' + totalStat.count + '\t' + totalStat.matches.join('\t'))
 })
