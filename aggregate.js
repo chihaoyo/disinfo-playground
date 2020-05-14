@@ -3,7 +3,7 @@ const fs = require('fs')
 const unzipper = require('unzipper')
 
 const baseDir = '.'
-const util = require(baseDir + '/util.js')
+const util = require(baseDir + '/lib/util.js')
 
 let ids = {}
 let rows = []
