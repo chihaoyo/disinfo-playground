@@ -1,1 +1,4 @@
-*datasets
+.DS_Store
+node_modules
+0archive-datasets
+0archive-public-datasets

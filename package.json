@@ -1,0 +1,19 @@
+{
+  "name": "disinfo-playground",
+  "version": "1.0.0",
+  "description": "- Create a link to 0archive datasets",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chihaoyo/disinfo-playground.git"
+  },
+  "author": "chihao",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/chihaoyo/disinfo-playground/issues"
+  },
+  "homepage": "https://github.com/chihaoyo/disinfo-playground#readme",
+  "dependencies": {
+    "unzipper": "^0.10.11"
+  }
+}
